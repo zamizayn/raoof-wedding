@@ -4,10 +4,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI, Type } from "@google/genai";
-import dotenv from 'dotenv';
 
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,10 +14,6 @@ const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
-
-// Initialize Google AI
-const apiKey = process.env.API_KEY || process.env.VITE_API_KEY;
-const genAI = new GoogleGenAI(apiKey);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -138,41 +131,26 @@ app.post('/api/gallery/upload', upload.single('image'), (req, res) => {
     }
 });
 
-app.post('/api/generate-dua', async (req, res) => {
+app.post('/api/generate-dua', (req, res) => {
     const { guestName } = req.body;
-    if (!guestName) {
-        return res.status(400).json({ error: 'Guest name is required' });
-    }
 
-    try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = `Generate a beautiful Islamic wedding Dua (prayer) for the marriage of Raoof Subi and Fahmida Najiya. The user ${guestName} is asking for a blessing. Provide it in a JSON format with 'dua' (Arabic/Transliteration) and 'translation' (English). Keep it concise and heartwarming.`;
-
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: Type.OBJECT,
-                    properties: {
-                        dua: { type: Type.STRING },
-                        translation: { type: Type.STRING }
-                    },
-                    required: ["dua", "translation"]
-                }
-            }
-        });
-
-        const response = result.response;
-        const text = response.text();
-        res.json(JSON.parse(text));
-    } catch (error) {
-        console.error("Error generating Dua:", error);
-        res.json({
+    const duas = [
+        {
             dua: "Barakallahu lakum wa baraka 'alaykum wa jama'a baynakuma fii khayr",
             translation: "May Allah bless you and shower His blessings upon you and join you in goodness."
-        });
-    }
+        },
+        {
+            dua: "Allahumma ic'al hadal 'aqda 'aqdan mubarakan wa sa'idan",
+            translation: "O Allah, make this marriage a blessed and happy union."
+        },
+        {
+            dua: "Rabbana hab lana min azwajina wa dhurriyatina qurrata a'yun",
+            translation: "Our Lord, grant us from among our spouses and offspring comfort to our eyes."
+        }
+    ];
+
+    const randomDua = duas[Math.floor(Math.random() * duas.length)];
+    res.json(randomDua);
 });
 
 // Serve static assets
