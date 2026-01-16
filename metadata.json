@@ -1,0 +1,7 @@
+{
+  "name": "Raoof & Fahmida's Wedding",
+  "description": "An elegant and interactive Muslim wedding invitation for Raoof Subi and Fahmida Najiya, featuring a countdown, location navigation, and personalized blessings.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
