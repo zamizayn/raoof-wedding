@@ -35,7 +35,7 @@ const Admin: React.FC = () => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const endpoint = tab === 'compliment' ? '/api/upload' : '/api/gallery/upload';
+        const endpoint = tab === 'compliment' ? 'https://raoof-wedding-api.akshikrm.com/api/upload' : 'https://raoof-wedding-api.akshikrm.com/api/gallery/upload';
 
         if (tab === 'compliment') {
             formData.append('name', name);

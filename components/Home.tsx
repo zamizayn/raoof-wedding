@@ -37,7 +37,7 @@ const Home: React.FC = () => {
         const fetchData = async () => {
             try {
                 // Fetch Compliments
-                const compRes = await fetch('/api/compliments');
+                const compRes = await fetch('https://raoof-wedding-api.akshikrm.com/api/compliments');
                 const compData = await compRes.json();
                 setCompliments(compData.map((item: any) => ({
                     name: item.name,
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
                 })));
 
                 // Fetch Gallery
-                const galleryRes = await fetch('/api/gallery');
+                const galleryRes = await fetch('https://raoof-wedding-api.akshikrm.com/api/gallery');
                 const galleryData = await galleryRes.json();
                 setGallery(galleryData.map((item: any) => ({
                     url: getImageUrl(item.url),

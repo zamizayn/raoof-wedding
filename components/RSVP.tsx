@@ -11,7 +11,7 @@ const RSVP: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/generate-dua', {
+      const response = await fetch('https://raoof-wedding-api.akshikrm.com/api/generate-dua', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
