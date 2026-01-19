@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Countdown from './Countdown';
 import RSVP from './RSVP';
+import Journey from './Journey';
+import Guestbook from './Guestbook';
+import AnimatedStory from './AnimatedStory';
 
 
 // Static Data (will be fetched from API)
@@ -146,6 +149,8 @@ const Home: React.FC = () => {
                     <div className="hidden md:flex gap-10 text-xs uppercase tracking-[0.2em] text-emerald-900 font-semibold">
                         <a href="#home" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Home</a>
                         <a href="#couple" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">The Couple</a>
+                        <a href="#journey" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Our Story</a>
+                        <a href="#story" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Our Poem</a>
                         <a href="#event" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Details</a>
                         <a href="#timeline" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Timeline</a>
                         <a href="#gallery" className="hover:text-[#D4AF37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#D4AF37] hover:after:w-full after:transition-all">Gallery</a>
@@ -243,6 +248,14 @@ const Home: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            </section>
+
+            {/* Journey Section */}
+            <Journey />
+
+            {/* Cinematic Story Section */}
+            <section id="story">
+                <AnimatedStory />
             </section>
 
             {/* Event Details */}
@@ -419,6 +432,9 @@ const Home: React.FC = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Guestbook Section */}
+            <Guestbook />
 
             {/* Footer */}
             <footer className="py-16 px-6 text-center bg-emerald-950 text-emerald-200/50 relative overflow-hidden">

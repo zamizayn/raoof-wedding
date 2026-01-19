@@ -131,6 +131,68 @@ app.post('/api/gallery/upload', upload.single('image'), (req, res) => {
     }
 });
 
+app.get('/api/guestbook', (req, res) => {
+    const jsonPath = path.join(__dirname, 'assets', 'guestbook.json');
+    if (fs.existsSync(jsonPath)) {
+        const fileContent = fs.readFileSync(jsonPath, 'utf-8');
+        res.json(JSON.parse(fileContent));
+    } else {
+        res.json([]);
+    }
+});
+
+app.post('/api/guestbook', (req, res) => {
+    const { name, message } = req.body;
+    if (!name || !message) {
+        return res.status(400).json({ error: 'Name and message are required' });
+    }
+
+    const jsonPath = path.join(__dirname, 'assets', 'guestbook.json');
+    try {
+        let data = [];
+        if (fs.existsSync(jsonPath)) {
+            data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+        }
+        const newEntry = {
+            id: Date.now().toString(),
+            name,
+            message,
+            date: new Date().toISOString()
+        };
+        data.unshift(newEntry); // Newest first
+        fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+        res.json(newEntry);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to save message' });
+    }
+});
+
+app.get('/api/journey', (req, res) => {
+    const jsonPath = path.join(__dirname, 'assets', 'journey.json');
+    if (fs.existsSync(jsonPath)) {
+        const fileContent = fs.readFileSync(jsonPath, 'utf-8');
+        res.json(JSON.parse(fileContent));
+    } else {
+        res.json([]);
+    }
+});
+
+app.delete('/api/guestbook/:id', (req, res) => {
+    const { id } = req.params;
+    const jsonPath = path.join(__dirname, 'assets', 'guestbook.json');
+    try {
+        if (fs.existsSync(jsonPath)) {
+            let data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+            data = data.filter(msg => msg.id !== id);
+            fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+            return res.json({ success: true });
+        }
+        res.status(404).json({ error: 'Not found' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete' });
+    }
+});
+
 app.post('/api/generate-dua', (req, res) => {
     const { guestName } = req.body;
 

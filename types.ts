@@ -24,3 +24,18 @@ export interface GalleryImage {
   caption?: string;
   category?: string;
 }
+
+export interface GuestbookMessage {
+  id: string;
+  name: string;
+  message: string;
+  date: string;
+}
+
+export interface JourneyMilestone {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+  image: string;
+}
