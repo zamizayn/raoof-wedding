@@ -86,7 +86,13 @@ app.post("/api/upload", upload.single("image"), (req, res) => {
         }
 
         // Store the Cloudinary URL (image.path)
-        const newEntry = { name, img: image.path };
+        const { tag } = req.body;
+        const newEntry = {
+            id: Date.now().toString(),
+            name,
+            img: image.path,
+            tag: tag || "Family"
+        };
         data.push(newEntry);
 
         fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
@@ -130,7 +136,11 @@ app.post("/api/gallery/upload", upload.single("image"), (req, res) => {
         }
 
         // Store the Cloudinary URL (image.path)
-        const newEntry = { url: image.path, caption: caption || "" };
+        const newEntry = {
+            id: Date.now().toString(),
+            url: image.path,
+            caption: caption || ""
+        };
         data.push(newEntry);
 
         fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
@@ -190,6 +200,38 @@ app.get("/api/journey", (req, res) => {
         res.json(JSON.parse(fileContent));
     } else {
         res.json([]);
+    }
+});
+
+app.delete("/api/compliments/:id", (req, res) => {
+    const { id } = req.params;
+    const jsonPath = path.join(__dirname, "assets", "compliments.json");
+    try {
+        if (fs.existsSync(jsonPath)) {
+            let data = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+            data = data.filter((item) => item.id !== id);
+            fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+            return res.json({ success: true });
+        }
+        res.status(404).json({ error: "Not found" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete" });
+    }
+});
+
+app.delete("/api/gallery/:id", (req, res) => {
+    const { id } = req.params;
+    const jsonPath = path.join(__dirname, "assets", "gallery.json");
+    try {
+        if (fs.existsSync(jsonPath)) {
+            let data = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+            data = data.filter((item) => item.id !== id);
+            fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+            return res.json({ success: true });
+        }
+        res.status(404).json({ error: "Not found" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete" });
     }
 });
 

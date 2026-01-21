@@ -5,7 +5,8 @@ const Journey: React.FC = () => {
     const [milestones, setMilestones] = useState<JourneyMilestone[]>([]);
 
     useEffect(() => {
-        fetch('/api/journey')
+        const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+        fetch(`${API_BASE}/api/journey`)
             .then(res => res.json())
             .then(data => setMilestones(data))
             .catch(err => console.error('Error fetching journey:', err));

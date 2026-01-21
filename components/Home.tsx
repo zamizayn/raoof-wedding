@@ -20,6 +20,7 @@ interface Compliment {
     id?: string;
     name: string;
     img: string;
+    tag: string;
 }
 
 const Home: React.FC = () => {
@@ -43,6 +44,7 @@ const Home: React.FC = () => {
                 setCompliments(compData.map((item: any) => ({
                     name: item.name,
                     img: getImageUrl(item.img),
+                    tag: item.tag || 'Family'
                 })));
 
                 // Fetch Gallery
@@ -492,7 +494,7 @@ const Home: React.FC = () => {
                             {compliments.map((person, index) => (
                                 <div
                                     key={`${person.name}-${index}`}
-                                    className={`flex-none w-48 md:w-64 snap-center transition-all duration-700 scroll-reveal ${index === compActiveIndex ? 'scale-105 opacity-100' : 'scale-95 opacity-40 grayscale'}`}
+                                    className={`flex-none w-48 md:w-64 snap-center transition-all duration-700 scroll-reveal ${index === compActiveIndex ? 'scale-105 opacity-100' : 'scale-95 opacity-80'}`}
                                 >
                                     <div className="relative flex flex-col items-center">
                                         <div className="relative w-40 h-40 md:w-52 md:h-52 rounded-full mb-8 group/card">
@@ -504,7 +506,7 @@ const Home: React.FC = () => {
                                                     <img
                                                         src={person.img}
                                                         alt={person.name}
-                                                        className="w-full h-full object-cover grayscale-[0.2] group-hover/card:grayscale-0 transition-all duration-700 group-hover/card:scale-110"
+                                                        className="w-full h-full object-cover transition-all duration-700 group-hover/card:scale-110"
                                                     />
                                                 </div>
                                             </div>
@@ -518,7 +520,7 @@ const Home: React.FC = () => {
                                             <h3 className={`text-xl md:text-2xl font-serif tracking-wide mb-1 transition-colors duration-300 ${index === compActiveIndex ? 'text-[#D4AF37]' : 'text-emerald-950 group-hover/card:text-[#D4AF37]'}`}>
                                                 {person.name}
                                             </h3>
-                                            <p className="text-[10px] md:text-xs text-[#D4AF37] uppercase tracking-[0.4em] font-bold opacity-60">Family</p>
+                                            <p className="text-[10px] md:text-xs text-[#D4AF37] uppercase tracking-[0.4em] font-bold opacity-60">{person.tag}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -554,7 +556,7 @@ const Home: React.FC = () => {
                     <p className="text-sm uppercase tracking-[0.3em] mb-4 text-[#D4AF37]/60">#RaoofSubiWedsFahmidaNajiya</p>
                     <div className="h-px w-20 bg-emerald-800 mx-auto mb-8"></div>
                     <p className="text-xs tracking-widest opacity-40">MAWADDAH • RAHMAH • SAKINAH</p>
-                    <p className="text-[10px] mt-8 opacity-30">© 2026 Raoof & Fahmida. Created with Gemini.</p>
+                    <p className="text-[10px] mt-8 opacity-30">© 2026 Raoof & Fahmida.</p>
                 </div>
 
                 <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
