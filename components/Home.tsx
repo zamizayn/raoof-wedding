@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Countdown from './Countdown';
 import RSVP from './RSVP';
 import Journey from './Journey';
 import Guestbook from './Guestbook';
 import AnimatedStory from './AnimatedStory';
 
-
-// Static Data (will be fetched from API)
-
 // Images (legacy)
 const images = import.meta.glob('../assets/*.{jpg,jpeg,png,webp}', { eager: true });
 
 const getImageUrl = (filename: string) => {
-    // If it's a full URL (Firebase), return it as is
     if (filename.startsWith('http')) return filename;
-
-    // 1. Try to find in built assets (handled by Vite's import.meta.glob)
     const key = `../assets/${filename}`;
     const module = images[key] as { default: string } | undefined;
     if (module?.default) return module.default;
-
-    // 2. Fallback to public folder (served at root /assets/...)
-    // This is necessary for images uploaded to public/assets but not yet part of the build bundle map
     return `/assets/${filename}`;
 };
 
@@ -35,6 +26,12 @@ const Home: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
     const [compliments, setCompliments] = useState<Compliment[]>([]);
     const [gallery, setGallery] = useState<{ url: string; caption: string }[]>([]);
+    const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; caption: string } | null>(null);
+
+    // Compliments Auto-scroll Ref and State
+    const complimentsRef = useRef<HTMLDivElement>(null);
+    const [compActiveIndex, setCompActiveIndex] = useState(0);
+    const [compIsHovered, setCompIsHovered] = useState(false);
 
     useEffect(() => {
         const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
@@ -62,6 +59,53 @@ const Home: React.FC = () => {
 
         fetchData();
     }, []);
+
+    // Compliments Auto-scroll logic
+    useEffect(() => {
+        if (!complimentsRef.current || compliments.length <= 1 || compIsHovered) {
+            console.log('Auto-scroll skipped:', {
+                hasRef: !!complimentsRef.current,
+                length: compliments.length,
+                isHovered: compIsHovered
+            });
+            return;
+        }
+
+        const interval = setInterval(() => {
+            const container = complimentsRef.current;
+            if (!container) return;
+
+            // Calculate card width dynamically including gap
+            const firstCard = container.firstElementChild as HTMLElement;
+            const gap = parseInt(window.getComputedStyle(container).gap) || 32;
+            const cardWidth = firstCard ? firstCard.offsetWidth + gap : (container.offsetWidth > 768 ? 320 : 224);
+
+            const maxScroll = container.scrollWidth - container.offsetWidth;
+
+            if (container.scrollLeft >= maxScroll - 20) {
+                container.scrollTo({ left: 0, behavior: 'smooth' });
+                setCompActiveIndex(0);
+            } else {
+                container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+        }, 1500);
+
+        return () => clearInterval(interval);
+    }, [compliments, compIsHovered]);
+
+    // Update dots on scroll for compliments
+    const handleCompScroll = () => {
+        if (!complimentsRef.current) return;
+        const container = complimentsRef.current;
+        const firstCard = container.firstElementChild as HTMLElement;
+        const gap = parseInt(window.getComputedStyle(container).gap) || 32;
+        const cardWidth = firstCard ? firstCard.offsetWidth + gap : (container.offsetWidth > 768 ? 320 : 224);
+
+        const index = Math.round(container.scrollLeft / cardWidth);
+        if (index !== compActiveIndex) {
+            setCompActiveIndex(index);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -254,9 +298,6 @@ const Home: React.FC = () => {
             {/* Journey Section */}
             <Journey />
 
-            {/* Cinematic Story Section */}
-
-
             {/* Event Details */}
             <section id="event" className="py-24 px-6 bg-white relative overflow-hidden border-t border-[#D4AF37]/10">
                 <div className="max-w-4xl mx-auto text-center">
@@ -292,7 +333,6 @@ const Home: React.FC = () => {
 
             {/* Modern Timeline Section */}
             <section id="timeline" className="py-24 px-6 bg-[#FFFBF0] relative overflow-hidden">
-                {/* Background Decoration */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4AF37]/5 rounded-full blur-3xl opacity-50 -ml-32 -mb-32"></div>
 
@@ -303,25 +343,18 @@ const Home: React.FC = () => {
                     </div>
 
                     <div className="relative">
-                        {/* The Main Decorative Line */}
                         <div className="absolute left-[30px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#D4AF37] via-[#D4AF37]/30 to-[#D4AF37] md:-translate-x-1/2"></div>
 
                         <div className="space-y-16">
                             {timelineItems.map((item, index) => (
                                 <div key={index} className={`relative flex flex-col md:flex-row items-start md:items-center scroll-reveal ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-
-                                    {/* Timeline Badge (Circle) */}
                                     <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center z-10">
                                         <div className="w-[60px] h-[60px] rounded-full bg-white border-4 border-[#FFFBF0] shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden">
                                             <div className="absolute inset-0 bg-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             {item.icon}
                                         </div>
                                     </div>
-
-                                    {/* Empty space for alternating layout on desktop */}
                                     <div className="hidden md:block md:w-1/2"></div>
-
-                                    {/* Timeline Card */}
                                     <div className={`w-full md:w-[45%] pl-20 md:pl-0 ${index % 2 === 0 ? 'md:pr-12 text-left md:text-right' : 'md:pl-12 text-left'}`}>
                                         <div className="bg-white p-8 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-emerald-50 hover:border-[#D4AF37]/30 hover:shadow-[0_15px_50px_rgba(212,175,55,0.1)] transition-all duration-500 group">
                                             <div className={`flex items-center gap-3 mb-3 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
@@ -335,7 +368,6 @@ const Home: React.FC = () => {
                                             </p>
                                         </div>
                                     </div>
-
                                 </div>
                             ))}
                         </div>
@@ -347,31 +379,49 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            {/* Gallery Section */}
+            {/* Editorial Museum Gallery Section */}
             <section id="gallery" className="py-24 px-6 bg-white relative overflow-hidden">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16 scroll-reveal">
-                        <span className="text-[#D4AF37] text-sm uppercase tracking-[0.4em] font-semibold block mb-4">Capturing Moments</span>
-                        <h2 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-6">Our Wedding Gallery</h2>
-                        <div className="w-24 h-1 bg-[#D4AF37] mx-auto rounded-full"></div>
+                    <div className="text-center mb-20 scroll-reveal">
+                        <span className="text-[#D4AF37] text-xs uppercase tracking-[0.6em] font-bold block mb-4">The Visual Story</span>
+                        <h2 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-6">Wedding Gallery</h2>
+                        <div className="w-16 h-1 bg-[#D4AF37] mx-auto rounded-full opacity-30"></div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                         {gallery.map((photo, index) => (
-                            <div key={index} className="scroll-reveal group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] shadow-lg hover:shadow-2xl transition-all duration-700">
-                                <img
-                                    src={photo.url}
-                                    alt={photo.caption || 'Wedding Gallery'}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
-                                    <p className="text-white font-serif text-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                        {photo.caption}
-                                    </p>
+                            <div
+                                key={index}
+                                className="scroll-reveal group relative cursor-pointer"
+                                onClick={() => setSelectedPhoto(photo)}
+                            >
+                                <div className="bg-white p-2.5 sm:p-3 shadow-md border border-[#D4AF37]/10 transition-all duration-500 group-hover:shadow-xl group-hover:border-[#D4AF37]/40 group-hover:-translate-y-1">
+                                    <div className="relative aspect-square overflow-hidden bg-emerald-50">
+                                        <img
+                                            src={photo.url}
+                                            alt={photo.caption || 'Wedding Gallery'}
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-emerald-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    </div>
+
+                                    {photo.caption && (
+                                        <div className="mt-3 text-center">
+                                            <p className="text-emerald-900/60 font-serif italic text-xs truncate px-1">
+                                                {photo.caption}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Photo Corner Ornament */}
+                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-md shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 border border-[#D4AF37]/20 rotate-12">
+                                    <span className="text-[10px] text-[#D4AF37]">✨</span>
                                 </div>
                             </div>
                         ))}
                     </div>
+
                     {gallery.length === 0 && (
                         <div className="text-center py-20 text-emerald-800/40 font-serif italic">
                             Beautiful moments are being uploaded...
@@ -379,6 +429,43 @@ const Home: React.FC = () => {
                     )}
                 </div>
             </section>
+
+            {/* Lightbox / Fullscreen Modal */}
+            {selectedPhoto && (
+                <div
+                    className="fixed inset-0 z-[100] bg-emerald-950/95 backdrop-blur-xl flex items-center justify-center p-6 sm:p-12 transition-all duration-500"
+                    onClick={() => setSelectedPhoto(null)}
+                >
+                    <button
+                        className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors"
+                        onClick={() => setSelectedPhoto(null)}
+                    >
+                        <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <div
+                        className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center gap-8 animate-fade-in-up"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="relative group max-h-[80vh] overflow-hidden rounded-3xl border-4 border-white shadow-2xl">
+                            <img
+                                src={selectedPhoto.url}
+                                alt={selectedPhoto.caption}
+                                className="max-w-full max-h-[80vh] object-contain"
+                            />
+                        </div>
+
+                        {selectedPhoto.caption && (
+                            <div className="text-center max-w-2xl px-6">
+                                <p className="text-white text-2xl font-serif italic mb-2">{selectedPhoto.caption}</p>
+                                <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto opacity-50"></div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* RSVP Section */}
             <RSVP />
@@ -392,20 +479,25 @@ const Home: React.FC = () => {
                         <div className="w-16 h-1 bg-[#D4AF37] mx-auto rounded-full opacity-30"></div>
                     </div>
 
-                    {/* Horizontal Snap Scroll Container */}
-                    <div className="relative group">
-                        <div className="flex overflow-x-auto gap-8 md:gap-16 pb-12 px-4 md:px-12 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing">
+                    <div
+                        className="relative group"
+                        onMouseEnter={() => setCompIsHovered(true)}
+                        onMouseLeave={() => setCompIsHovered(false)}
+                    >
+                        <div
+                            ref={complimentsRef}
+                            onScroll={handleCompScroll}
+                            className="flex overflow-x-auto gap-8 md:gap-16 pb-12 px-4 md:px-12 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing scroll-smooth"
+                        >
                             {compliments.map((person, index) => (
                                 <div
                                     key={`${person.name}-${index}`}
-                                    className="flex-none w-48 md:w-64 snap-center scroll-reveal"
+                                    className={`flex-none w-48 md:w-64 snap-center transition-all duration-700 scroll-reveal ${index === compActiveIndex ? 'scale-105 opacity-100' : 'scale-95 opacity-40 grayscale'}`}
                                 >
                                     <div className="relative flex flex-col items-center">
-                                        {/* Circular Portrait with Golden Border */}
                                         <div className="relative w-40 h-40 md:w-52 md:h-52 rounded-full mb-8 group/card">
-                                            {/* Rotating Golden Ring on Hover */}
-                                            <div className="absolute -inset-2 rounded-full border border-[#D4AF37]/20 group-hover/card:border-[#D4AF37]/60 group-hover/card:scale-105 transition-all duration-700"></div>
-                                            <div className="absolute -inset-4 rounded-full border border-[#D4AF37]/5 scale-90 group-hover/card:scale-110 transition-all duration-1000 delay-75 pointer-events-none"></div>
+                                            <div className={`absolute -inset-2 rounded-full border transition-all duration-700 ${index === compActiveIndex ? 'border-[#D4AF37]/60 scale-105' : 'border-[#D4AF37]/20 group-hover/card:border-[#D4AF37]/60 group-hover/card:scale-105'}`}></div>
+                                            <div className={`absolute -inset-4 rounded-full border border-[#D4AF37]/5 transition-all duration-1000 delay-75 pointer-events-none ${index === compActiveIndex ? 'scale-110' : 'scale-90 group-hover/card:scale-110'}`}></div>
 
                                             <div className="w-full h-full rounded-full p-2 bg-white shadow-xl relative z-10">
                                                 <div className="w-full h-full rounded-full overflow-hidden border border-emerald-50">
@@ -417,15 +509,13 @@ const Home: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Leaf Decoration on Circle */}
-                                            <div className="absolute -top-1 -right-1 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-500 z-20">
+                                            <div className={`absolute -top-1 -right-1 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-500 z-20 ${index === compActiveIndex ? 'opacity-100' : 'opacity-0 group-hover/card:opacity-100'}`}>
                                                 <span className="text-sm">🍃</span>
                                             </div>
                                         </div>
 
-                                        {/* Refined Minimalist Typography */}
                                         <div className="text-center">
-                                            <h3 className="text-xl md:text-2xl font-serif text-emerald-950 tracking-wide mb-1 transition-colors duration-300 group-hover/card:text-[#D4AF37]">
+                                            <h3 className={`text-xl md:text-2xl font-serif tracking-wide mb-1 transition-colors duration-300 ${index === compActiveIndex ? 'text-[#D4AF37]' : 'text-emerald-950 group-hover/card:text-[#D4AF37]'}`}>
                                                 {person.name}
                                             </h3>
                                             <p className="text-[10px] md:text-xs text-[#D4AF37] uppercase tracking-[0.4em] font-bold opacity-60">Family</p>
@@ -435,26 +525,29 @@ const Home: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Hint for scrolling */}
                         <div className="flex justify-center mt-4">
                             <div className="flex gap-1.5">
                                 {compliments.map((_, i) => (
-                                    <div key={i} className={`h-1 rounded-full bg-[#D4AF37] transition-all duration-500 ${i === 0 ? 'w-8' : 'w-2 opacity-20'}`}></div>
+                                    <div
+                                        key={i}
+                                        onClick={() => {
+                                            const cardWidth = complimentsRef.current?.offsetWidth! > 768 ? 320 : 224;
+                                            complimentsRef.current?.scrollTo({ left: i * cardWidth, behavior: 'smooth' });
+                                        }}
+                                        className={`h-1 rounded-full bg-[#D4AF37] transition-all duration-500 cursor-pointer ${i === compActiveIndex ? 'w-8' : 'w-2 opacity-20 hover:opacity-40'}`}
+                                    ></div>
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Subtle side gradients for fade effect */}
                 <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
                 <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
             </section>
 
-            {/* Guestbook Section */}
             <Guestbook />
 
-            {/* Footer */}
             <footer className="py-16 px-6 text-center bg-emerald-950 text-emerald-200/50 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto relative z-10">
                     <span className="text-3xl font-cursive text-[#D4AF37] mb-6 block">R & F</span>
@@ -464,7 +557,6 @@ const Home: React.FC = () => {
                     <p className="text-[10px] mt-8 opacity-30">© 2026 Raoof & Fahmida. Created with Gemini.</p>
                 </div>
 
-                {/* Decorative footer pattern */}
                 <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
                     <div className="w-full h-full ornament-bg"></div>
                 </div>
