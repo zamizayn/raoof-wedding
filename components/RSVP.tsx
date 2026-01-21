@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 
-
 const RSVP: React.FC = () => {
+  const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dua, setDua] = useState<{ dua: string; translation: string } | null>(null);
@@ -11,7 +10,7 @@ const RSVP: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/generate-dua', {
+      const response = await fetch(`${API_BASE}/api/generate-dua`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,8 +25,9 @@ const RSVP: React.FC = () => {
         dua: "Barakallahu lakum wa baraka 'alaykum wa jama'a baynakuma fii khayr",
         translation: "May Allah bless you and shower His blessings upon you and join you in goodness."
       });
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (

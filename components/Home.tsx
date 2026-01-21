@@ -37,10 +37,11 @@ const Home: React.FC = () => {
     const [gallery, setGallery] = useState<{ url: string; caption: string }[]>([]);
 
     useEffect(() => {
+        const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
         const fetchData = async () => {
             try {
                 // Fetch Compliments
-                const compRes = await fetch('/api/compliments');
+                const compRes = await fetch(`${API_BASE}/api/compliments`);
                 const compData = await compRes.json();
                 setCompliments(compData.map((item: any) => ({
                     name: item.name,
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
                 })));
 
                 // Fetch Gallery
-                const galleryRes = await fetch('/api/gallery');
+                const galleryRes = await fetch(`${API_BASE}/api/gallery`);
                 const galleryData = await galleryRes.json();
                 setGallery(galleryData.map((item: any) => ({
                     url: getImageUrl(item.url),
@@ -81,7 +82,7 @@ const Home: React.FC = () => {
     }, []);
 
     const navigateToLocation = () => {
-        window.open('https://www.google.com/maps/search/?api=1&query=Mukkam+Kerala', '_blank');
+        window.open('https://www.google.com/maps/search/?api=1&query=Snehatheeram Convention Centre, Kozhikode', '_blank');
     };
 
     const shareWebsite = () => {
@@ -254,9 +255,7 @@ const Home: React.FC = () => {
             <Journey />
 
             {/* Cinematic Story Section */}
-            <section id="story">
-                <AnimatedStory />
-            </section>
+
 
             {/* Event Details */}
             <section id="event" className="py-24 px-6 bg-white relative overflow-hidden border-t border-[#D4AF37]/10">
@@ -284,8 +283,8 @@ const Home: React.FC = () => {
                                 </svg>
                             </div>
                             <h3 className="text-[#D4AF37] font-semibold uppercase tracking-widest text-sm">Where</h3>
-                            <p className="text-2xl font-serif text-emerald-900">Mukkam, Kozhikode</p>
-                            <p className="text-emerald-800/70">Kerala, India - Family Residence</p>
+                            <p className="text-2xl font-serif text-emerald-900">Snehatheeram Convention Centre, Kozhikode</p>
+                            <p className="text-emerald-800/70">REC, Malayamma Rd, Ambalakkandi, Omassery, Puthur, Kerala 673582</p>
                         </div>
                     </div>
                 </div>
@@ -384,53 +383,72 @@ const Home: React.FC = () => {
             {/* RSVP Section */}
             <RSVP />
 
-            {/* With Best Compliments Section */}
-            <section className="py-24 px-6 bg-[#FEFCF8] relative overflow-hidden">
-                {/* Subtle Background Pattern */}
-                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
-                    backgroundImage: 'radial-gradient(#D4AF37 0.8px, transparent 0.8px)',
-                    backgroundSize: '32px 32px'
-                }}></div>
-
-                <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="text-center mb-16 scroll-reveal">
-                        <span className="text-sm uppercase tracking-[0.4em] text-[#D4AF37] font-semibold block mb-4">With Gratitude</span>
-                        <h2 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-6">With Best Compliments</h2>
-                        <div className="w-24 h-px bg-[#D4AF37] mx-auto opacity-50"></div>
+            {/* Minimalist Circular Luxury Compliments Section */}
+            <section className="py-32 px-6 bg-white relative overflow-hidden">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20 scroll-reveal">
+                        <span className="text-[#D4AF37] text-xs uppercase tracking-[0.6em] font-bold block mb-4">With Love & Gratitude</span>
+                        <h2 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-6">Our Best Compliments</h2>
+                        <div className="w-16 h-1 bg-[#D4AF37] mx-auto rounded-full opacity-30"></div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10 justify-center">
-                        {compliments.map((person, index) => (
-                            <div key={`${person.name}-${index}`} className="group relative flex flex-col items-center scroll-reveal">
+                    {/* Horizontal Snap Scroll Container */}
+                    <div className="relative group">
+                        <div className="flex overflow-x-auto gap-8 md:gap-16 pb-12 px-4 md:px-12 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing">
+                            {compliments.map((person, index) => (
+                                <div
+                                    key={`${person.name}-${index}`}
+                                    className="flex-none w-48 md:w-64 snap-center scroll-reveal"
+                                >
+                                    <div className="relative flex flex-col items-center">
+                                        {/* Circular Portrait with Golden Border */}
+                                        <div className="relative w-40 h-40 md:w-52 md:h-52 rounded-full mb-8 group/card">
+                                            {/* Rotating Golden Ring on Hover */}
+                                            <div className="absolute -inset-2 rounded-full border border-[#D4AF37]/20 group-hover/card:border-[#D4AF37]/60 group-hover/card:scale-105 transition-all duration-700"></div>
+                                            <div className="absolute -inset-4 rounded-full border border-[#D4AF37]/5 scale-90 group-hover/card:scale-110 transition-all duration-1000 delay-75 pointer-events-none"></div>
 
-                                {/* Arch Image Container */}
-                                <div className="relative w-full max-w-[180px] aspect-[3/4] rounded-t-full overflow-hidden border border-[#D4AF37]/20 shadow-md group-hover:shadow-xl transition-all duration-700">
-                                    <div className="absolute inset-0 bg-emerald-900/10 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                                            <div className="w-full h-full rounded-full p-2 bg-white shadow-xl relative z-10">
+                                                <div className="w-full h-full rounded-full overflow-hidden border border-emerald-50">
+                                                    <img
+                                                        src={person.img}
+                                                        alt={person.name}
+                                                        className="w-full h-full object-cover grayscale-[0.2] group-hover/card:grayscale-0 transition-all duration-700 group-hover/card:scale-110"
+                                                    />
+                                                </div>
+                                            </div>
 
-                                    <img
-                                        src={person.img}
-                                        alt={person.name}
-                                        className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110"
-                                    />
+                                            {/* Leaf Decoration on Circle */}
+                                            <div className="absolute -top-1 -right-1 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-500 z-20">
+                                                <span className="text-sm">🍃</span>
+                                            </div>
+                                        </div>
 
-                                    {/* Inner Border for Detail */}
-                                    <div className="absolute inset-3 rounded-t-full border border-white/30 pointer-events-none"></div>
+                                        {/* Refined Minimalist Typography */}
+                                        <div className="text-center">
+                                            <h3 className="text-xl md:text-2xl font-serif text-emerald-950 tracking-wide mb-1 transition-colors duration-300 group-hover/card:text-[#D4AF37]">
+                                                {person.name}
+                                            </h3>
+                                            <p className="text-[10px] md:text-xs text-[#D4AF37] uppercase tracking-[0.4em] font-bold opacity-60">Family</p>
+                                        </div>
+                                    </div>
                                 </div>
+                            ))}
+                        </div>
 
-                                {/* Name */}
-                                <div className="mt-4 text-center relative z-20">
-                                    <h3 className="text-lg font-serif text-emerald-950 group-hover:text-[#D4AF37] transition-colors duration-300">
-                                        {person.name}
-                                    </h3>
-                                    <div className="w-0 group-hover:w-full h-0.5 bg-[#D4AF37] transition-all duration-500 mx-auto mt-1 opacity-0 group-hover:opacity-100"></div>
-                                </div>
-
-                                {/* Background Glow */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#D4AF37]/5 rounded-full blur-3xl -z-10 group-hover:bg-[#D4AF37]/10 transition-colors duration-500"></div>
+                        {/* Hint for scrolling */}
+                        <div className="flex justify-center mt-4">
+                            <div className="flex gap-1.5">
+                                {compliments.map((_, i) => (
+                                    <div key={i} className={`h-1 rounded-full bg-[#D4AF37] transition-all duration-500 ${i === 0 ? 'w-8' : 'w-2 opacity-20'}`}></div>
+                                ))}
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
+
+                {/* Subtle side gradients for fade effect */}
+                <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
+                <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
             </section>
 
             {/* Guestbook Section */}

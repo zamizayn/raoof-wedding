@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 const Admin: React.FC = () => {
+    const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
     const [tab, setTab] = useState<'compliment' | 'gallery' | 'guestbook'>('compliment');
     const [name, setName] = useState('');
     const [caption, setCaption] = useState('');
@@ -19,7 +20,7 @@ const Admin: React.FC = () => {
 
     const fetchGuestbook = async () => {
         try {
-            const res = await fetch('/api/guestbook');
+            const res = await fetch(`${API_BASE}/api/guestbook`);
             const data = await res.json();
             setGuestMessages(data);
         } catch (err) {
@@ -30,7 +31,7 @@ const Admin: React.FC = () => {
     const deleteMessage = async (id: string) => {
         if (!confirm('Are you sure you want to delete this message?')) return;
         try {
-            const res = await fetch(`/api/guestbook/${id}`, { method: 'DELETE' });
+            const res = await fetch(`${API_BASE}/api/guestbook/${id}`, { method: 'DELETE' });
             if (res.ok) fetchGuestbook();
         } catch (err) {
             console.error(err);
@@ -61,7 +62,7 @@ const Admin: React.FC = () => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const endpoint = tab === 'compliment' ? '/api/upload' : '/api/gallery/upload';
+        const endpoint = tab === 'compliment' ? `${API_BASE}/api/upload` : `${API_BASE}/api/gallery/upload`;
 
         if (tab === 'compliment') {
             formData.append('name', name);
