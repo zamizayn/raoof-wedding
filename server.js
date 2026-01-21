@@ -4,7 +4,11 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import dotenv from 'dotenv';
 
+dotenv.config({ path: '.env.local' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,18 +19,19 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // Save to public/assets so they are accessible via URL immediately
-        const assetsPath = path.join(__dirname, 'public', 'assets');
-        if (!fs.existsSync(assetsPath)) {
-            fs.mkdirSync(assetsPath, { recursive: true });
-        }
-        cb(null, assetsPath);
+// Cloudinary configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'wedding_uploads',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
     },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
 });
 
 const upload = multer({ storage: storage });
@@ -59,8 +64,6 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
         return res.status(400).json({ error: 'Name and image are required' });
     }
 
-    // Update the JSON file in assets folder
-    // Note: Ensuring the folder exists
     const assetsFolder = path.join(__dirname, 'assets');
     if (!fs.existsSync(assetsFolder)) {
         fs.mkdirSync(assetsFolder, { recursive: true });
@@ -79,7 +82,8 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
             }
         }
 
-        const newEntry = { name, img: image.filename };
+        // Store the Cloudinary URL (image.path)
+        const newEntry = { name, img: image.path };
         data.push(newEntry);
 
         fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
@@ -118,7 +122,8 @@ app.post('/api/gallery/upload', upload.single('image'), (req, res) => {
             }
         }
 
-        const newEntry = { url: image.filename, caption: caption || '' };
+        // Store the Cloudinary URL (image.path)
+        const newEntry = { url: image.path, caption: caption || '' };
         data.push(newEntry);
 
         fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
