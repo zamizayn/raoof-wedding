@@ -5,8 +5,8 @@ const AudioPlayer: React.FC = () => {
     const [isMuted, setIsMuted] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    // Using a high-quality royalty-free piano instrumental
-    const audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; // Placeholder, can be replaced with a specific track
+    // Using "Tum Se Hi" from Jab We Met (Archive.org)
+    const audioUrl = "https://archive.org/download/TumSeHiFullSongJabWeMetShahidKapoor/Tum%20Se%20Hi%20Full%20Song%20Jab%20We%20Met%20Shahid%20Kapoor.mp3";
 
     useEffect(() => {
         if (audioRef.current) {
@@ -33,8 +33,24 @@ const AudioPlayer: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-8 left-8 z-[60] flex items-center gap-3">
+        <div className="fixed bottom-8 right-8 z-[60] flex items-center gap-3">
             <audio ref={audioRef} src={audioUrl} loop stroke-width="0" />
+
+            <div className={`px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-3 transition-all duration-700 ${isPlaying ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10 pointer-events-none'}`}>
+                <span className="text-[10px] text-[#D4AF37] font-bold uppercase tracking-widest whitespace-nowrap">Tum Se Hi - Jab We Met</span>
+                <button onClick={toggleMute} className="text-[#D4AF37] hover:scale-110 transition-transform">
+                    {isMuted ? (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15L4 13.414V10.586L5.586 9m1.414 7.414L11 20V4L7 8H4v8h3l4 4z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                        </svg>
+                    ) : (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15L4 13.414V10.586L5.586 9m1.414 7.414L11 20V4L7 8H4v8h3l4 4z" />
+                        </svg>
+                    )}
+                </button>
+            </div>
 
             <button
                 onClick={togglePlay}
@@ -54,22 +70,6 @@ const AudioPlayer: React.FC = () => {
                     </svg>
                 )}
             </button>
-
-            <div className={`px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-3 transition-all duration-700 ${isPlaying ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10 pointer-events-none'}`}>
-                <span className="text-[10px] text-[#D4AF37] font-bold uppercase tracking-widest whitespace-nowrap">Wedding Instrumental</span>
-                <button onClick={toggleMute} className="text-[#D4AF37] hover:scale-110 transition-transform">
-                    {isMuted ? (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15L4 13.414V10.586L5.586 9m1.414 7.414L11 20V4L7 8H4v8h3l4 4z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                        </svg>
-                    ) : (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15L4 13.414V10.586L5.586 9m1.414 7.414L11 20V4L7 8H4v8h3l4 4z" />
-                        </svg>
-                    )}
-                </button>
-            </div>
 
             <style>{`
                 @keyframes music-bar {

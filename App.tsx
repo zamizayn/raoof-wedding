@@ -11,6 +11,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <CustomCursor />
+      <AudioPlayer />
       <FloatingBackground />
       <Routes>
         <Route path="/" element={<Home />} />
