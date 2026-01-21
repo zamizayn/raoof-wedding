@@ -25,6 +25,7 @@ interface Compliment {
 
 const Home: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [scrollPosition, setScrollPosition] = useState(0);
     const [compliments, setCompliments] = useState<Compliment[]>([]);
     const [gallery, setGallery] = useState<{ url: string; caption: string }[]>([]);
     const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; caption: string } | null>(null);
@@ -112,6 +113,7 @@ const Home: React.FC = () => {
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
+            setScrollPosition(window.scrollY);
 
             const elements = document.querySelectorAll('.scroll-reveal');
             elements.forEach((el) => {
@@ -188,7 +190,7 @@ const Home: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen ornament-bg overflow-x-hidden">
+        <div className="min-h-screen overflow-x-hidden">
             {/* Navbar */}
             <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
                 <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -223,6 +225,7 @@ const Home: React.FC = () => {
                         src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80"
                         alt="Wedding Background"
                         className="w-full h-full object-cover scale-110 animate-slow-zoom"
+                        style={{ transform: `translateY(${scrollPosition * 0.3}px) scale(1.1)` }}
                     />
                 </div>
 
@@ -248,7 +251,7 @@ const Home: React.FC = () => {
             </header>
 
             {/* Meet the Couple Section (Caricature) */}
-            <section id="couple" className="py-24 px-6 bg-[#FFFBF0] relative">
+            <section id="couple" className="py-24 px-6 relative">
                 <div className="max-w-6xl mx-auto flex flex-col items-center">
                     <div className="scroll-reveal text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">The Happy Couple</h2>
@@ -264,6 +267,7 @@ const Home: React.FC = () => {
                                     src="https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&q=80&w=800"
                                     alt="Couple Caricature Illustration"
                                     className="w-full h-full object-cover grayscale-0 group-hover:scale-110 transition-transform duration-700"
+                                    style={{ transform: `scale(1.1) translateY(${(scrollPosition - 800) * 0.05}px)` }}
                                 />
                             </div>
                             <div className="absolute -top-4 -right-4 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center animate-gentle-spin">
@@ -301,14 +305,14 @@ const Home: React.FC = () => {
             <Journey />
 
             {/* Event Details */}
-            <section id="event" className="py-24 px-6 bg-white relative overflow-hidden border-t border-[#D4AF37]/10">
+            <section id="event" className="py-24 px-6 relative overflow-hidden border-t border-[#D4AF37]/10">
                 <div className="max-w-4xl mx-auto text-center">
                     <div className="scroll-reveal mb-8">
                         <span className="text-4xl text-[#D4AF37]">✨</span>
                     </div>
                     <h2 className="scroll-reveal text-4xl md:text-5xl font-serif text-emerald-900 mb-12">The Celebration</h2>
                     <div className="scroll-reveal grid md:grid-cols-2 gap-12 text-left">
-                        <div className="group space-y-4 p-10 rounded-[2.5rem] bg-white border border-emerald-100 shadow-[0_20px_50px_rgba(6,78,59,0.05)] hover:shadow-[0_20px_60px_rgba(6,78,59,0.1)] transition-all duration-500">
+                        <div className="group space-y-4 p-10 rounded-[2.5rem] bg-white/50 backdrop-blur-sm border border-emerald-100 shadow-[0_20px_50px_rgba(6,78,59,0.05)] hover:shadow-[0_20px_60px_rgba(6,78,59,0.1)] transition-all duration-500">
                             <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-900 group-hover:bg-[#D4AF37] group-hover:text-white transition-colors duration-300">
                                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -318,7 +322,7 @@ const Home: React.FC = () => {
                             <p className="text-2xl font-serif text-emerald-900">February 14, 2026</p>
                             <p className="text-emerald-800/70">Saturday morning at 11:00 AM onwards</p>
                         </div>
-                        <div className="group space-y-4 p-10 rounded-[2.5rem] bg-white border border-emerald-100 shadow-[0_20px_50px_rgba(6,78,59,0.05)] hover:shadow-[0_20px_60px_rgba(6,78,59,0.1)] transition-all duration-500">
+                        <div className="group space-y-4 p-10 rounded-[2.5rem] bg-white/50 backdrop-blur-sm border border-emerald-100 shadow-[0_20px_50px_rgba(6,78,59,0.05)] hover:shadow-[0_20px_60px_rgba(6,78,59,0.1)] transition-all duration-500">
                             <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-900 group-hover:bg-[#D4AF37] group-hover:text-white transition-colors duration-300">
                                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -334,7 +338,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Modern Timeline Section */}
-            <section id="timeline" className="py-24 px-6 bg-[#FFFBF0] relative overflow-hidden">
+            <section id="timeline" className="py-24 px-6 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4AF37]/5 rounded-full blur-3xl opacity-50 -ml-32 -mb-32"></div>
 
@@ -358,7 +362,7 @@ const Home: React.FC = () => {
                                     </div>
                                     <div className="hidden md:block md:w-1/2"></div>
                                     <div className={`w-full md:w-[45%] pl-20 md:pl-0 ${index % 2 === 0 ? 'md:pr-12 text-left md:text-right' : 'md:pl-12 text-left'}`}>
-                                        <div className="bg-white p-8 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-emerald-50 hover:border-[#D4AF37]/30 hover:shadow-[0_15px_50px_rgba(212,175,55,0.1)] transition-all duration-500 group">
+                                        <div className="bg-white/80 backdrop-blur-sm p-8 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-emerald-50 hover:border-[#D4AF37]/30 hover:shadow-[0_15px_50px_rgba(212,175,55,0.1)] transition-all duration-500 group">
                                             <div className={`flex items-center gap-3 mb-3 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                                                 <span className="px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-900 text-xs font-bold tracking-widest uppercase">
                                                     {item.time}
@@ -382,7 +386,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Editorial Museum Gallery Section */}
-            <section id="gallery" className="py-24 px-6 bg-white relative overflow-hidden">
+            <section id="gallery" className="py-24 px-6 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20 scroll-reveal">
                         <span className="text-[#D4AF37] text-xs uppercase tracking-[0.6em] font-bold block mb-4">The Visual Story</span>
@@ -397,7 +401,7 @@ const Home: React.FC = () => {
                                 className="scroll-reveal group relative cursor-pointer"
                                 onClick={() => setSelectedPhoto(photo)}
                             >
-                                <div className="bg-white p-2.5 sm:p-3 shadow-md border border-[#D4AF37]/10 transition-all duration-500 group-hover:shadow-xl group-hover:border-[#D4AF37]/40 group-hover:-translate-y-1">
+                                <div className="bg-white/50 backdrop-blur-sm p-2.5 sm:p-3 shadow-md border border-[#D4AF37]/10 transition-all duration-500 group-hover:shadow-xl group-hover:border-[#D4AF37]/40 group-hover:-translate-y-1">
                                     <div className="relative aspect-square overflow-hidden bg-emerald-50">
                                         <img
                                             src={photo.url}
@@ -473,7 +477,7 @@ const Home: React.FC = () => {
             <RSVP />
 
             {/* Minimalist Circular Luxury Compliments Section */}
-            <section className="py-32 px-6 bg-white relative overflow-hidden">
+            <section className="py-32 px-6 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20 scroll-reveal">
                         <span className="text-[#D4AF37] text-xs uppercase tracking-[0.6em] font-bold block mb-4">With Love & Gratitude</span>
@@ -501,7 +505,7 @@ const Home: React.FC = () => {
                                             <div className={`absolute -inset-2 rounded-full border transition-all duration-700 ${index === compActiveIndex ? 'border-[#D4AF37]/60 scale-105' : 'border-[#D4AF37]/20 group-hover/card:border-[#D4AF37]/60 group-hover/card:scale-105'}`}></div>
                                             <div className={`absolute -inset-4 rounded-full border border-[#D4AF37]/5 transition-all duration-1000 delay-75 pointer-events-none ${index === compActiveIndex ? 'scale-110' : 'scale-90 group-hover/card:scale-110'}`}></div>
 
-                                            <div className="w-full h-full rounded-full p-2 bg-white shadow-xl relative z-10">
+                                            <div className="w-full h-full rounded-full p-2 bg-white/50 backdrop-blur-sm shadow-xl relative z-10">
                                                 <div className="w-full h-full rounded-full overflow-hidden border border-emerald-50">
                                                     <img
                                                         src={person.img}
@@ -544,8 +548,8 @@ const Home: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
-                <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent pointer-events-none z-20 md:block hidden"></div>
+                <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#FFFBF0]/80 to-transparent pointer-events-none z-20 md:block hidden"></div>
+                <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#FFFBF0]/80 to-transparent pointer-events-none z-20 md:block hidden"></div>
             </section>
 
             <Guestbook />

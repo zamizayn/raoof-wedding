@@ -60,7 +60,7 @@ const Guestbook: React.FC = () => {
     const marqueeMessages = [...messages, ...messages];
 
     return (
-        <section id="guestbook" className="py-16 px-6 bg-[#FEFCF8] relative overflow-hidden text-emerald-950">
+        <section id="guestbook" className="py-16 px-6 relative overflow-hidden text-emerald-950">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-10 scroll-reveal">
                     <span className="text-sm uppercase tracking-[0.4em] text-[#D4AF37] font-semibold block mb-3">Digital Guestbook</span>
@@ -79,7 +79,7 @@ const Guestbook: React.FC = () => {
 
                 <div className="flex flex-col gap-12">
                     {/* Submission Form */}
-                    <div className="max-w-xl mx-auto w-full bg-white p-6 md:p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-emerald-50 scroll-reveal">
+                    <div className="max-w-xl mx-auto w-full bg-white/50 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-emerald-50 scroll-reveal">
                         <div className="text-center mb-6">
                             <h3 className="text-xl font-serif mb-1">Leave a Blessing</h3>
                             <p className="text-emerald-800/50 text-xs">Your words will become a part of our journey.</p>
@@ -136,7 +136,7 @@ const Guestbook: React.FC = () => {
                                         className="flex-none w-[280px] md:w-[350px] whitespace-normal cursor-pointer"
                                         onClick={() => setSelectedWish(msg)}
                                     >
-                                        <div className="h-full bg-white p-6 rounded-[1.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-emerald-50 relative transition-all duration-500 hover:border-[#D4AF37]/30 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
+                                        <div className="h-full bg-white/80 backdrop-blur-sm p-6 rounded-[1.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-emerald-50 relative transition-all duration-500 hover:border-[#D4AF37]/30 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between">
                                             <div className="absolute top-4 right-6 text-4xl text-emerald-50 pointer-events-none font-serif">"</div>
 
                                             <div className="relative z-10">
