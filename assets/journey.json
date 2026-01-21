@@ -1,23 +1,2 @@
-[
-    {
-        "id": "1",
-        "title": "First Meeting",
-        "date": "March 2023",
-        "description": "It all started with a simple 'Assalamu Alaikum' and a conversation that never seemed to end.",
-        "image": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80"
-    },
-    {
-        "id": "2",
-        "title": "The Proposal",
-        "date": "August 2024",
-        "description": "A quiet moment by the sea, where promises were made to walk together forever.",
-        "image": "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80"
-    },
-    {
-        "id": "3",
-        "title": "Our Journey Begins",
-        "date": "February 2026",
-        "description": "The day we officially become one. We can't wait to share it with you!",
-        "image": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80"
-    }
-]
+[]
+
