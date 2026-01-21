@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 
 const Admin: React.FC = () => {
@@ -10,6 +10,7 @@ const Admin: React.FC = () => {
     const [preview, setPreview] = useState<string | null>(null);
     const [status, setStatus] = useState<string>('');
     const [isUploading, setIsUploading] = useState(false);
+    const uploadingRef = useRef(false);
     const [guestMessages, setGuestMessages] = useState<any[]>([]);
 
     useEffect(() => {
@@ -48,6 +49,9 @@ const Admin: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isUploading || uploadingRef.current) return;
+
+        uploadingRef.current = true;
 
         if (!image) {
             setStatus('Please provide an image.');
@@ -93,6 +97,7 @@ const Admin: React.FC = () => {
             setStatus('Error connecting to server. Ensure you are running locally.');
         } finally {
             setIsUploading(false);
+            uploadingRef.current = false;
         }
     };
 

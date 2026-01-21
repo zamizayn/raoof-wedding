@@ -7,6 +7,7 @@ const Guestbook: React.FC = () => {
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const submittingRef = useRef(false);
     const [status, setStatus] = useState('');
     const [selectedWish, setSelectedWish] = useState<GuestbookMessage | null>(null);
 
@@ -26,6 +27,9 @@ const Guestbook: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isSubmitting || submittingRef.current) return;
+
+        submittingRef.current = true;
         setIsSubmitting(true);
         setStatus('');
 
@@ -48,6 +52,7 @@ const Guestbook: React.FC = () => {
             setStatus('Error connecting to server.');
         } finally {
             setIsSubmitting(false);
+            submittingRef.current = false;
         }
     };
 
