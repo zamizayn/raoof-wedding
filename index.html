@@ -29,6 +29,360 @@
             font-family: 'Amiri', serif;
         }
 
+
+        /* Slow gallery light sweep */
+        @keyframes lightMove {
+            0% {
+                transform: translateX(-20%);
+            }
+
+            50% {
+                transform: translateX(20%);
+            }
+
+            100% {
+                transform: translateX(-20%);
+            }
+        }
+
+        .animate-light {
+            animation: lightMove 20s ease-in-out infinite;
+        }
+
+        /* Gentle fade */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        /* Floating form */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Cards settling into wall */
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        /* Modal pop */
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+        @keyframes hour {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(30deg);
+            }
+        }
+
+        @keyframes minute {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(180deg);
+            }
+        }
+
+        @keyframes second {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-hour {
+            animation: hour 4s linear infinite;
+        }
+
+        .animate-minute {
+            animation: minute 4s linear infinite;
+        }
+
+        .animate-second {
+            animation: second 1s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+
+            100% {
+                transform: rotate(-3deg);
+            }
+        }
+
+        .animate-swing {
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+
+            100% {
+                transform: rotate(-3deg);
+            }
+        }
+
+        .animate-swing {
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+        @keyframes settle {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: settle 0.9s ease forwards;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+
+            100% {
+                transform: rotate(-3deg);
+            }
+        }
+
+        .animate-swing {
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: none;
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+
+
+
+
         @keyframes fade-in-up {
             from {
                 opacity: 0;

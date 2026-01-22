@@ -301,6 +301,8 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
+            <Guestbook />
+
             {/* Journey Section */}
             <Journey />
 
@@ -552,7 +554,7 @@ const Home: React.FC = () => {
                 <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#FFFBF0]/80 to-transparent pointer-events-none z-20 md:block hidden"></div>
             </section>
 
-            <Guestbook />
+
 
             <footer className="py-16 px-6 text-center bg-emerald-950 text-emerald-200/50 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto relative z-10">
